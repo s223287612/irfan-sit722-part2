@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: book_catalog
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: book_catalog
+  template:
+    metadata:
+      labels:
+        app: book_catalog
+    spec:
+      containers:
+      - name: book_catalog
+        image: irfan-sit722-part-2:latest
+        imagePullPolicy: Never
+        env:
+        - name: DATABASE_URL
+          value: "postgresql://irfan_sit722_part2_user:FV1mtbYUY0eK6z1gEqW1Rs2SjhawFm3F@dpg-cs3ee5aj1k6c73acskng-a.oregon-postgres.render.com/irfan_sit722_part2"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: book_catalog
+spec:
+  selector:
+    app: book_catalog
+  type: NodePort
+  ports:
+  - protocol: TCP
+    port: 8000
+    targetPort: 8000
+    nodePort: 30000
